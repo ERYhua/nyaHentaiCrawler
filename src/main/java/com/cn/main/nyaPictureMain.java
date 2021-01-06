@@ -3,6 +3,8 @@ package com.cn.main;
 import com.cn.util.HttpClientUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -29,6 +31,7 @@ public class nyaPictureMain {
         List<String> urlList = new ArrayList<String>();
 
         //地址
+        urlList.add("https://zha.doghentai.com/g/338012/");
         urlList.add("");
         urlList.add("");
         urlList.add("");
@@ -36,6 +39,19 @@ public class nyaPictureMain {
         urlList.add("");
         urlList.add("");
         urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+        urlList.add("");
+
+
 
 
 
@@ -54,7 +70,21 @@ public class nyaPictureMain {
                 CloseableHttpClient httpClient = HttpClients.createDefault(); // 创建HttpClient实例
                 HttpGet httpGet = new HttpGet(fileUrl+i+suffix); // 创建Httpget实例
                 //设置Http报文头信息
-                httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0");
+                httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36");
+                httpGet.setHeader("accept", "image/avif,image/webp,image/apng,image/*,*/*;q=0.8");
+                httpGet.setHeader("accept-encoding", "gzip, deflate, br");
+                httpGet.setHeader("referer", "https://zha.doghentai.com/");
+                httpGet.setHeader("sec-fetch-dest", "image");
+                httpGet.setHeader("accept-language", "zh-CN,zh;q=0.9,en;q=0.8");
+
+                HttpHost proxy = new HttpHost("127.0.0.1", 7890);
+                //超时时间单位为毫秒
+                 RequestConfig defaultRequestConfig = RequestConfig.custom()
+                         .setConnectTimeout(1000).setSocketTimeout(30000)
+                         .setProxy(proxy).build();
+                httpClient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+
+
                 CloseableHttpResponse response = null;
                 response = httpClient.execute(httpGet); // 执行http get请求
                 HttpEntity entity = response.getEntity(); // 获取返回实体
@@ -95,12 +125,12 @@ public class nyaPictureMain {
                 Elements picSum = document.select("div.thumb-container");
                 //获取本子名字
                 String benziName = element.select("img").attr("alt");
-                benziName = benziName.replaceAll("\\?","").replaceAll(":","").replaceAll(" ","");
+                benziName = benziName.replaceAll("\\?","").replaceAll(":","").replaceAll(" ","").replaceAll("\\*","");
 
                 int count = picSum.size();
                 int benziN = Integer.parseInt(ourStr[ourStr.length-2]);
                 String suffix = "."+oursuffix[oursuffix.length-1];
-                String fileUrl = "https://search.pstatic.net/common?src=https://i.nyahentai.net/galleries/"+benziN+"/";
+                String fileUrl = "https://i0.nyacdn.com/galleries/"+benziN+"/";
                 String intputFile = fileSource +benziName +"//";
                 nyaPictureMain.crawlerNyaPic(count,fileUrl,intputFile,suffix);
 
